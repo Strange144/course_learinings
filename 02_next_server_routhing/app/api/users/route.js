@@ -14,15 +14,30 @@ export const user = [
 ]
 export async function GET(responce) {
     try {
+
+        const { searchParams } = new URL(responce.url);
+        const name = searchParams.get("name")
+        const rollno = searchParams.get("rollno")
+
+        let filteredUsers = user
+
+        if (rollno) {
+            filteredUsers = filteredUsers.filter((u) => u.rollno == Number(rollno))
+        }
+
+        if (name) {
+            filteredUsers = filteredUsers.filter((u) => u.name.toLowerCase().includes(name.toLowerCase()))
+        }
+
         return NextResponse.json({
             Success: true,
-            data: user,
+            data: filteredUsers,
             records: user.length
         })
     } catch (error) {
         return NextResponse.json({
             Success: false,
-            data: `there is something wrong :- ${error} `,
+            data: `there is something wrong :- ${error.message || error} `,
         })
 
     }
