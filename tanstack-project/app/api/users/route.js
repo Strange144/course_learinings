@@ -8,3 +8,10 @@ export async function GET(){
     await new Promise((resolve)=>(setTimeout(resolve,1000)))
     return Response.json(user)
 }
+
+export async function POST(request){
+    const body = await request.json()
+    const newUser = { id: user.length + 1, name: body.name, email: body.email }
+    user.push(newUser)
+    return Response.json(newUser, { status: 201 })
+}
